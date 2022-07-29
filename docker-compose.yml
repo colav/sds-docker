@@ -1,0 +1,54 @@
+version: '3.3'
+
+services:
+   sds_frontend:
+     image: colav/sds-ui:latest
+     container_name: sds_frontend
+     depends_on:
+       - sds_backend
+     ports:
+       - "80:80"
+       - "443:443"
+       - "22:21382"
+     restart: always
+     environment:
+       PORT: 443
+       HTTPS: "true"
+       BACKEND_HEARTBEAT: "http://sds_backend:8080/app/home"
+     deploy:
+            resources:
+                limits:
+                  cpus: '2.0'
+                  memory: 8192M
+     links:
+       - sds_backend
+
+   sds_backend:
+     image: colav/sds-backend:latest
+     container_name: sds_backend
+     depends_on:
+       - sds_mongodb
+     ports:
+       - "8080:8080"
+     restart: always
+     environment:
+       MONGODB_IP: sds_mongodb
+     deploy:
+            resources:
+                limits:
+                  cpus: '2.0'
+                  memory: 8192M
+     links:
+       - sds_mongodb
+   
+   sds_mongodb:
+     image: colav/sds-mongodb:latest
+     container_name: sds_mongodb
+     ports:
+       - "27017:27017"
+     restart: always
+     deploy:
+            resources:
+                limits:
+                  cpus: '2.0'
+                  memory: 8192M

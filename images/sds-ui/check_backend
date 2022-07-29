@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+import requests
+import time
+import sys
+
+
+while True:
+    print(f"Checking backend at {sys.argv[1]}")
+    try:
+        r = requests.get(sys.argv[1])
+        if r.status_code != 200:
+            print(f"Sleeping 5 sec waiting for backend at {sys.argv[1]}")
+            time.sleep(5)
+        else:
+            print(f"Backend ready at {sys.argv[1]}")
+            break
+    except:
+            print(f"Sleeping 5 sec waiting for backend at {sys.argv[1]}")
+            time.sleep(5)
+
+
+
+
+
